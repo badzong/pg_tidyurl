@@ -1,9 +1,9 @@
 CC=gcc
 CFLAGS=-Wall -I/home/manuel/Downloads/postgresql-9.0.4/src/include -fpic -c
-OBJECTS=sanitize.o
+OBJECTS=tidyurl.o
 LDFLAGS=-shared
 
-sanitize_url.so: $(OBJECTS)
+tidyurl.so: $(OBJECTS)
 	$(LD) $(LDFLAGS) -o $@ $<
 
 %.o: %.c
