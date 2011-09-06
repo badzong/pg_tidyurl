@@ -1,9 +1,9 @@
 CC=gcc
-CFLAGS=-Wall -I/home/manuel/Downloads/postgresql-9.0.4/src/include -fpic -c
+CFLAGS=-Wall -fpic -c
 OBJECTS=tidyurl.o
 LDFLAGS=-shared
 
-tidyurl.so: $(OBJECTS)
+pg_tidyurl.so: $(OBJECTS)
 	$(LD) $(LDFLAGS) -o $@ $<
 
 %.o: %.c
