@@ -132,7 +132,8 @@ static const translation translator[] = {
 	{ "#", "_" },
 	{ "*", "_" },
 	{ "\"", "_" },
-	{ "\'", "_" },
+	{ "'", "_" },
+	{ "`", "_" },
 	{ "(", "_" },
 	{ ")", "_" },
 	{ "[", "_" },
@@ -140,6 +141,8 @@ static const translation translator[] = {
 	{ "{", "_" },
 	{ "}", "_" },
 	{ "|", "_" },
+	{ "~", "_" },
+	{ "^", "_" },
 
 	// Translate choosen characters to urlencoded
 	{ "!", "%21" },
@@ -206,8 +209,8 @@ Datum *tidyurl(PG_FUNCTION_ARGS)
 			}
 		}
 
-		// Skip unknown/untranslated utf-8 chars
-		if (*src & 128)
+		// Skip unknown/untranslated utf-8 chars and non printables
+		if (*src <= 32 || *src >= 127)
 		{
 			++in;
 			continue;
@@ -277,7 +280,7 @@ Datum *tidyurl(PG_FUNCTION_ARGS)
 	*/
 	
 	// Return result
-	ret_size = out + 1 + VARHDRSZ;
+	ret_size = out + VARHDRSZ;
 	ret = (VarChar *) palloc(ret_size);
 	if (ret == NULL)
 	{
@@ -286,9 +289,8 @@ Datum *tidyurl(PG_FUNCTION_ARGS)
 		PG_RETURN_NULL();
 	}
 
-	memset(ret, 0, ret_size);
 	SET_VARSIZE(ret, ret_size);
-	strcpy(VARDATA(ret), res);
+	memcpy(VARDATA(ret), res, ret_size);
 
 	pfree(str);
 	pfree(res);
