@@ -290,7 +290,7 @@ Datum *tidyurl(PG_FUNCTION_ARGS)
 	}
 
 	SET_VARSIZE(ret, ret_size);
-	memcpy(VARDATA(ret), res, ret_size);
+	memcpy(VARDATA(ret), res, out);
 
 	pfree(str);
 	pfree(res);
