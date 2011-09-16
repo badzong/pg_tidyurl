@@ -9,6 +9,9 @@
     PG_MODULE_MAGIC;
 #endif
 
+#define SPACE_CHAR '-'
+#define SPACE_STR "-"
+
 typedef struct {
 	char *tr_from;
 	char *tr_to;
@@ -113,36 +116,36 @@ static const translation translator[] = {
 
 	{ "ß", "ss" },
 
-	// Translate spaces to underscores
-	{ " ", "_" },
-	{ "\t", "_" },
-	{ "\r", "_" },
-	{ "\n", "_" },
+	// Translate spaces
+	{ " ", SPACE_STR },
+	{ "\t", SPACE_STR },
+	{ "\r", SPACE_STR },
+	{ "\n", SPACE_STR },
 
-	// Translate punctuation to underscores
-	{ "/", "_" },
-	{ ".", "_" },
-	{ ":", "_" },
-	{ ",", "_" },
-	{ ";", "_" },
-	{ "<", "_" },
-	{ ">", "_" },
-	{ "=", "_" },
-	{ "\\", "_" },
-	{ "#", "_" },
-	{ "*", "_" },
-	{ "\"", "_" },
-	{ "'", "_" },
-	{ "`", "_" },
-	{ "(", "_" },
-	{ ")", "_" },
-	{ "[", "_" },
-	{ "]", "_" },
-	{ "{", "_" },
-	{ "}", "_" },
-	{ "|", "_" },
-	{ "~", "_" },
-	{ "^", "_" },
+	// Translate punctuation
+	{ "/", SPACE_STR },
+	{ ".", SPACE_STR },
+	{ ":", SPACE_STR },
+	{ ",", SPACE_STR },
+	{ ";", SPACE_STR },
+	{ "<", SPACE_STR },
+	{ ">", SPACE_STR },
+	{ "=", SPACE_STR },
+	{ "\\", SPACE_STR },
+	{ "#", SPACE_STR },
+	{ "*", SPACE_STR },
+	{ "\"", SPACE_STR },
+	{ "'", SPACE_STR },
+	{ "`", SPACE_STR },
+	{ "(", SPACE_STR },
+	{ ")", SPACE_STR },
+	{ "[", SPACE_STR },
+	{ "]", SPACE_STR },
+	{ "{", SPACE_STR },
+	{ "}", SPACE_STR },
+	{ "|", SPACE_STR },
+	{ "~", SPACE_STR },
+	{ "^", SPACE_STR },
 
 	// Translate choosen characters to urlencoded
 	{ "!", "%21" },
@@ -217,7 +220,7 @@ Datum *tidyurl(PG_FUNCTION_ARGS)
 		}
 
 		// Skip double white spaces: _
-		if (out && *(dst - 1) == '_' && *src == '_')
+		if (out && *(dst - 1) == SPACE_CHAR && *src == SPACE_CHAR)
 		{
 			++in;
 			continue;
@@ -263,7 +266,7 @@ Datum *tidyurl(PG_FUNCTION_ARGS)
 	}
 
 	// Remove trailing underscores (spaces)
-	for (;*dst == '_'; --dst)
+	for (;*dst == SPACE_CHAR; --dst)
 	{
 		*dst = 0;
 	}
